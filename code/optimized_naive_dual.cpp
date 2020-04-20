@@ -54,19 +54,19 @@ line optimized_naive_dual::solve (std::vector<point> &red_points,
 	std::vector<int> red_position;
 	std::vector<int> blue_position;
 
-	for (int i = 0; i < red.size(); i++) {
+	for (int i = 0; i < (int)red.size(); i++) {
 		lines.push_back(coloured_line(red[i], i, 0));
 		red_position.push_back(i);
 	}
-	for (int i = 0; i < blue.size(); i++) {
+	for (int i = 0; i < (int)blue.size(); i++) {
 		lines.push_back(coloured_line(blue[i], i, 1));
 		blue_position.push_back(i);
 	}
 
 	std::vector<pair_of_lines> events;
 
-	for (int i = 0; i < lines.size(); i++) {
-		for(int j = i+1; j < lines.size(); j++) {
+	for (int i = 0; i < (int)lines.size(); i++) {
+		for(int j = i+1; j < (int)lines.size(); j++) {
 			events.push_back(pair_of_lines(lines[i], lines[j]));
 		}
 	}
@@ -87,14 +87,18 @@ line optimized_naive_dual::solve (std::vector<point> &red_points,
 				std::swap(p.first_line, p.second_line);
 			}
 			int red_id = red_position[p.first_line.id];
-			if (red_id < (red.size()-1)/2 || red_id > red.size()/2) {
+			if (red_id < ((int)red.size()-1)/2 
+					|| red_id > (int)red.size()/2) {
 				continue;
 			}
 	 		int blue_id = blue_position[p.second_line.id];
-			if (blue_id<(blue.size()-1)/2 || blue_id>blue.size()/2) {
+			if (blue_id < ((int)blue.size()-1)/2 
+					|| blue_id > (int)blue.size()/2) {
 				continue;
 			}
 			return point(p.first_line.l, p.second_line.l).dual();
 		}
-	}	
+	}
+
+	return line(0, 0);	
 }

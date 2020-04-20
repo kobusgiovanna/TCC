@@ -3,7 +3,6 @@
 
 #define EPS 1e-9
 
-//dualled
 struct optimized_naive::coloured_point {
 	point p;
 	int id;
@@ -13,7 +12,6 @@ struct optimized_naive::coloured_point {
 		p(new_p), id(new_id), color(new_color) {}
 };
 
-//dualled
 struct optimized_naive::pair_of_points {
 	coloured_point first_point;
 	coloured_point second_point;
@@ -22,12 +20,10 @@ struct optimized_naive::pair_of_points {
 		first_point(p), second_point(q) {}
 };
 
-//dualled change name later
 bool optimized_naive::x_coordinate (point p, point q) {
 	return p.x < q.x;
 }
 
-//dualled change name later
 bool optimized_naive::slope_of_connecting_line
 		(pair_of_points p, pair_of_points q) {
 
@@ -48,19 +44,19 @@ line optimized_naive::solve (std::vector<point> red,
 	std::vector<int> red_position;
 	std::vector<int> blue_position;
 
-	for (int i = 0; i < red.size(); i++) {
+	for (int i = 0; i < (int)red.size(); i++) {
 		points.push_back(coloured_point(red[i], i, 0));
 		red_position.push_back(i);
 	}
-	for (int i = 0; i < blue.size(); i++) {
+	for (int i = 0; i < (int)blue.size(); i++) {
 		points.push_back(coloured_point(blue[i], i, 1));
 		blue_position.push_back(i);
 	}
 
 	std::vector<pair_of_points> events;
 
-	for (int i = 0; i < points.size(); i++) {
-		for(int j = i+1; j < points.size(); j++) {
+	for (int i = 0; i < (int)points.size(); i++) {
+		for(int j = i+1; j < (int)points.size(); j++) {
 			events.push_back(pair_of_points(points[i], points[j]));
 		}
 	}
@@ -81,14 +77,18 @@ line optimized_naive::solve (std::vector<point> red,
 				std::swap(p.first_point, p.second_point);
 			}
 			int red_id = red_position[p.first_point.id];
-			if (red_id < (red.size()-1)/2 || red_id > red.size()/2) {
+			if (red_id < ((int)red.size()-1)/2 ||
+					red_id > (int)red.size()/2) {
 				continue;
 			}
 	 		int blue_id = blue_position[p.second_point.id];
-			if (blue_id<(blue.size()-1)/2 || blue_id>blue.size()/2) {
+			if (blue_id < ((int)blue.size()-1)/2 ||
+					blue_id > (int)blue.size()/2) {
 				continue;
 			}
 			return line(p.first_point.p, p.second_point.p);
 		}
-	}	
+	}
+
+	return line(0, 0);
 }

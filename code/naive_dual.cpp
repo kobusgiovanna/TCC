@@ -1,27 +1,13 @@
 
 #include "naive_dual.hpp"
 
-bool naive_dual::is_solution (point p, std::vector<line> &red, 
-		std::vector<line> &blue) {
-
-	int red_below = 0, red_above = 0;
-	int blue_below = 0, blue_above = 0;
-
-	for (line l:red) {
-		if (l.is_below(p)) red_below++;
-		if (l.is_above(p)) red_above++;
+bool naive_dual::is_median_level(point p, std::vector<line> &lines) {
+	int below = 0, above = 0;
+	for (line l: lines) {
+		if (l.is_below(p)) below++;
+		if (l.is_above(p)) above++;
 	}
-
-	for (line l:blue) {
-		if (l.is_below(p)) blue_below++;
-		if (l.is_above(p)) blue_above++;
-	}
-
-	return red_below <= red.size()/2 && 
-		   red_above <= red.size()/2 && 
-		   blue_below <= blue.size()/2 && 
-		   blue_above <= blue.size()/2;
-
+	return below <= (int)lines.size()/2 && above <= (int)lines.size()/2;
 }
 
 line naive_dual::solve (std::vector<point> &red_points,
@@ -36,8 +22,12 @@ line naive_dual::solve (std::vector<point> &red_points,
 	for (line r:red) {
 		for (line b:blue) {
 			point p = point(r, b);
-			if (is_solution(p, red, blue)) return p.dual();
+			if (is_median_level(p, blue) && is_median_level(p, red)) {
+				return p.dual();
+			} 
 		}
 	}
+
+	return line(0, 0);
 }
 

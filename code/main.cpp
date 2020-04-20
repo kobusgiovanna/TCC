@@ -5,6 +5,13 @@
 #include "optimized_naive.hpp"
 #include "optimized_naive_dual.hpp"
 
+bool is_solution (line l, std::vector<point> &red, 
+		std::vector<point> &blue) {
+
+	return naive::bissects(l, red) && naive::bissects(l, blue);
+
+}
+
 int main() {
 
 	srand(time(NULL));
@@ -67,7 +74,7 @@ int main() {
 
 	std::cout << solution.m << " " << solution.b << std::endl;
 
-	if (naive::is_solution(solution, red, blue)) {
+	if (is_solution(solution, red, blue)) {
 		std::cout << "Correct answer" << std::endl;
 	}
 	else {

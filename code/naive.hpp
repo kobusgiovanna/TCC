@@ -4,8 +4,7 @@
 
 namespace naive {
 
-	bool is_solution (line l, std::vector<point> &red, 
-			std::vector<point> &blue);
+	bool bissects (line l, std::vector<point> points) ;
 
 	line solve (std::vector<point> &red, 
 			std::vector<point> &blue);

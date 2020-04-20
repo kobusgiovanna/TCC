@@ -4,8 +4,7 @@
 
 namespace naive_dual {
 
-	bool is_solution (point p, std::vector<line> &red, 
-			std::vector<line> &blue);
+	bool is_median_level(point p, std::vector<line> &lines);
 
 	line solve (std::vector<point> &red_points, 
 			std::vector<point> &blue_points);
