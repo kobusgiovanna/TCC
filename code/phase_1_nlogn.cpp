@@ -14,10 +14,13 @@ bool phase_1_nlogn::smaller_eval (line l, line m, double x) {
 	return l.m > m.m;
 }
 
-int phase_1_nlogn::inversions (std::vector<int> &v, int i, int j) {
-	if (i == j) return 0;
+std::pair<int,std::pair<int,int>> phase_1_nlogn::inversions_and_random_inversion
+(std::vector<int> &v, int i, int j) {
+	if (i == j) return std::make_pair(0, std::make_pair(0, 0));
 	int k = (i + j)/2;
-	int resp = inversions(v, i, k) + inversions(v, k + 1, j);
+	auto resp1 = inversions_and_random_inversion(v, i, k);
+	auto resp2 = inversions_and_random_inversion(v, k + 1, j);
+	auto resp3 = std::make_pair(1, std::make_pair(0, 0));
 	int it1 = i, it2 = k + 1;
 	std::vector<int> new_v;
 	while (it1 <= k || it2 <= j) {
@@ -25,47 +28,30 @@ int phase_1_nlogn::inversions (std::vector<int> &v, int i, int j) {
 			new_v.push_back(v[it1++]);
 		}
 		else {
-			resp += k - it1 + 1;
+			int r = rand() % (resp3.first + k - it1 + 1);
+			if(r < k - it1 + 1){
+				resp3.second = std::make_pair(v[it2], v[it1 + r]);
+			}
+			resp3.first += k - it1 + 1;
 			new_v.push_back(v[it2++]);
 		}
 	}
 	for (int it = 0; it < new_v.size(); it++) v[i + it] = new_v[it];
+	std::pair<int,std::pair<int,int>> resp;
+	resp.first = resp1.first + resp2.first + resp3.first;
+	int r = rand() % resp.first;
+	if (r < resp1.first) resp.second = resp1.second;
+	else if (r < resp1.first + resp2.first) resp.second = resp2.second;
+	else resp.second = resp3.second;
 	return resp;
 }
 
 int phase_1_nlogn::inversions (std::vector<int> v) {
-	return inversions(v, 0, v.size()-1);
-}
-
-std::pair<int, int> phase_1_nlogn::random_inversion 
-(std::vector<int> &v, int i, int j) {
-	if (i == j) return std::make_pair(0, 0);
-	std::vector<int> v_copy = v;
-	int k = (i + j)/2;
-	int inv1 = inversions(v, i, k);
-	int inv2 = inversions(v, k+1, j);
-	int inv3 = inversions(v, i, j);
-
-	int r = random() % (inv1 + inv2 + inv3);
-	if (r < inv1) return random_inversion(v_copy, i, k);
-	if (r < inv1 + inv2) return random_inversion(v_copy, k+1, j);
-	v = v_copy;
-	r -= inversions(v, i, k) + inversions(v, k+1, j);
-	
-	int it1 = i, it2 = k + 1;
-	while (it1 <= k || it2 <= j) {
-		if ((it1 <= k && it2 <= j && v[it1] < v[it2]) || it2 > j) it1++;
-		else {
-			if (r >= k - it1 + 1) r -= k - it1 + 1;
-			else return std::make_pair(v[it2], v[it1 + r]);
-			it2++;
-		}
-	}
-	return std::make_pair(0, 0);
+	return inversions_and_random_inversion(v, 0, v.size()-1).first;
 }
 
 std::pair<int, int> phase_1_nlogn::random_inversion (std::vector<int> v) {
-	return random_inversion(v, 0, v.size()-1);
+	return inversions_and_random_inversion(v, 0, v.size()-1).second;
 }
 
 std::pair<int,std::pair<line,line>> 
