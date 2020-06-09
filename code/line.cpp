@@ -28,3 +28,7 @@ bool line::is_above (point p) {
 bool line::is_below (point p) {
 	return p.y - (m*p.x + b) > LINE_EPS;
 }
+
+double line::eval (double x) {
+	return m*x + b;
+}

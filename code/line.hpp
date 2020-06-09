@@ -25,6 +25,8 @@ class line {
 
 		bool is_below (point p);
 
+		double eval (double x);
+
 };
 
 #endif
