@@ -10,6 +10,9 @@ namespace phase_1_nlogn {
 	std::pair<int,std::pair<int,int>> inversions_and_random_inversion
 	(std::vector<int> &v, int i, int j);
 
+	std::pair<int,std::pair<int,int>> inversions_and_random_inversion
+	(std::vector<int> v);
+
 	int inversions (std::vector<int> v);
 
 	std::pair<int, int> random_inversion (std::vector<int> v);

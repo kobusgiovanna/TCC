@@ -8,7 +8,7 @@
 #define EPS 1e-9
 
 bool phase_1_nlogn::smaller_eval (line l, line m, double x) {
-	if (abs(l.eval(x) - m.eval(x)) > EPS) {
+	if (fabs(l.eval(x) - m.eval(x)) > EPS) {
 		return l.eval(x) < m.eval(x);
 	}
 	return l.m > m.m;
@@ -50,6 +50,13 @@ std::pair<int,std::pair<int,int>> phase_1_nlogn::inversions_and_random_inversion
 	return resp;
 }
 
+std::pair<int,std::pair<int,int>> phase_1_nlogn::inversions_and_random_inversion
+(std::vector<int> v){
+	return inversions_and_random_inversion(v, 0, v.size()-1);
+}
+
+
+//remove after testing
 int phase_1_nlogn::inversions (std::vector<int> v) {
 	return inversions_and_random_inversion(v, 0, v.size()-1).first;
 }
@@ -77,11 +84,10 @@ phase_1_nlogn::intersections_and_random_intersection
 	);
 	std::vector<int> permutation;
 	for (auto x : perm1) permutation.push_back(x.second);
-	int inters = inversions(permutation);
-	std::pair<int, int> inv = random_inversion(permutation);
-	std::pair<line, line> random_inter = 
-		std::make_pair(v[inv.first], v[inv.second]);
-	return std::make_pair(inters, random_inter);
+	auto aux = inversions_and_random_inversion(permutation);
+	std::pair<line,line> inter =
+		std::make_pair(v[aux.second.first], v[aux.second.second]);
+	return std::make_pair(aux.first, inter);
 }
 
 int phase_1_nlogn::intersections
@@ -103,11 +109,14 @@ line phase_1_nlogn::pth_level(std::vector<line> v, int p, double x) {
 
 bool phase_1_nlogn::odd_level_intersection (std::vector<line> g1,
 		std::vector<line> g2, int p1, int p2, std::pair<double, double> t) {
-	double p1_x1 = pth_level(g1, p1, t.first).eval(t.first);
-	double p2_x1 = pth_level(g2, p2, t.first).eval(t.first);
-	double p1_x2 = pth_level(g1, p1, t.second).eval(t.second);
-	double p2_x2 = pth_level(g2, p2, t.second).eval(t.second);
-	if((p1_x1 < p2_x1) ^ (p1_x2 < p2_x2)) return 1;
+	line p1_x1 = pth_level(g1, p1, t.first);
+	line p2_x1 = pth_level(g2, p2, t.first);
+	line p1_x2 = pth_level(g1, p1, t.second);
+	line p2_x2 = pth_level(g2, p2, t.second);
+	if(smaller_eval(p1_x1, p2_x1, t.first) ^ 
+			smaller_eval(p1_x2, p2_x2, t.second)) {
+		return 1;
+	}
 	return 0;
 }
 
