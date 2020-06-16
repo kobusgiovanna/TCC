@@ -2,7 +2,7 @@
 
 #define LINE_EPS 1e-9
 
-line::line (double x, double y) : m(x), b(y) {}
+line::line (double m, double b) : m(m), b(b) {}
 
 line::line (point p, point q) {
 	m = (q.y - p.y)/(q.x - p.x);
@@ -10,7 +10,7 @@ line::line (point p, point q) {
 }
 
 bool line::equals (line l) {
-	return abs(m-l.m) < LINE_EPS && abs(b-l.b) < LINE_EPS;
+	return fabs(m-l.m) < LINE_EPS && fabs(b-l.b) < LINE_EPS;
 }
 
 point line::dual () {
@@ -18,7 +18,7 @@ point line::dual () {
 }
 
 bool line::is_on (point p) {
-	return abs(p.y - (m*p.x + b)) <= LINE_EPS;
+	return fabs(p.y - (m*p.x + b)) <= LINE_EPS;
 }
 
 bool line::is_above (point p) {
@@ -31,4 +31,15 @@ bool line::is_below (point p) {
 
 double line::eval (double x) {
 	return m*x + b;
+}
+
+point line::at (int x) {
+	return point(x, eval(x));
+}
+
+bool line::smaller_eval (line m, double x) {
+	if (fabs(eval(x) - m.eval(x)) > LINE_EPS) {
+		return eval(x) < m.eval(x);
+	}
+	return this->m > m.m;
 }

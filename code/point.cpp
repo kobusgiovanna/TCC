@@ -14,7 +14,7 @@ line point::dual () {
 }
 
 bool point::is_on (line l) {
-	return abs(y - (l.m*x + l.b)) <= POINT_EPS;
+	return fabs(y - (l.m*x + l.b)) <= POINT_EPS;
 }
 
 bool point::is_above (line l) {

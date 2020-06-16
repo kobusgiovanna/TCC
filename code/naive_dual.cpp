@@ -10,24 +10,15 @@ bool naive_dual::is_median_level(point p, std::vector<line> &lines) {
 	return below <= (int)lines.size()/2 && above <= (int)lines.size()/2;
 }
 
-line naive_dual::solve (std::vector<point> &red_points,
-		std::vector<point> &blue_points) {
-
-	std::vector<line> red;
-	std::vector<line> blue;
-
-	for (point p:red_points) red.push_back(p.dual());
-	for (point p:blue_points) blue.push_back(p.dual());
-
+point naive_dual::solve (std::vector<line> red, std::vector<line> blue) {
 	for (line r:red) {
 		for (line b:blue) {
 			point p = point(r, b);
 			if (is_median_level(p, blue) && is_median_level(p, red)) {
-				return p.dual();
+				return p;
 			} 
 		}
 	}
-
-	return line(0, 0);
+	return point(0, 0);
 }
 

@@ -33,19 +33,8 @@ bool optimized_naive_dual::x_of_intersection
 	return p_intersection.x < q_intersection.x;
 }
 
-line optimized_naive_dual::solve (std::vector<point> &red_points,
-		std::vector<point> &blue_points) {
-
-	std::vector<line> red;
-	std::vector<line> blue;
-
-	for (point p:red_points) {
-		red.push_back(p.dual());
-	}
-	for (point p:blue_points) {
-		blue.push_back(p.dual());
-	}
-
+point optimized_naive_dual::solve (std::vector<line> red,
+		std::vector<line> blue) {
 	sort(red.begin(), red.end(), at_minus_infinity);
 	sort(blue.begin(), blue.end(), at_minus_infinity);
 
@@ -96,9 +85,9 @@ line optimized_naive_dual::solve (std::vector<point> &red_points,
 					|| blue_id > (int)blue.size()/2) {
 				continue;
 			}
-			return point(p.first_line.l, p.second_line.l).dual();
+			return point(p.first_line.l, p.second_line.l);
 		}
 	}
 
-	return line(0, 0);	
+	return point(0, 0);	
 }

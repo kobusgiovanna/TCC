@@ -1,6 +1,5 @@
 #ifndef POINT_H 
 #define POINT_H
-
 #include <cmath>
 #include "line.hpp"
 
