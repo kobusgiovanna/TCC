@@ -13,6 +13,9 @@ namespace optimized_naive_dual {
 
 	bool x_of_intersection (pair_of_lines p, pair_of_lines q);
 
+	point solve (std::vector<line> red, std::vector<line> blue, int p1,
+		int p2);
+
 	point solve (std::vector<line> red, std::vector<line> blue);
 
 }

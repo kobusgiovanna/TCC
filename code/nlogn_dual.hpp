@@ -8,6 +8,6 @@
 
 namespace nlogn_dual {
 
-	point find_cut (std::vector<line> g1, std::vector<line> g2);
+	point solve (std::vector<line> g1, std::vector<line> g2);
 	
 }

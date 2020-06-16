@@ -2,6 +2,10 @@
 #include <ctime>
 #include "phase_1_nlogn.hpp"
 
+//fix
+#include <iostream>
+using namespace std;
+
 #define EPS 1e-9
 
 std::pair<long long, std::pair<int, int>> phase_1_nlogn::inversions
@@ -104,11 +108,17 @@ std::pair<interval, bool> phase_1_nlogn::new_interval
 	auto curr_inters = aux.first;
 	auto random_inter = aux.second;
 	while (32*curr_inters > max_intersections(g1)) {
+		//cout<<curr_inters<<" "<<t.left<<" "<<t.right<<endl;
 		double pivot = point(random_inter.first, random_inter.second).x;
+		//cout<<pivot<<endl;
 		interval t1 = interval(t.left, pivot);
 		interval t2 = interval(pivot, t.right);
 		if(odd_level_intersection(g1, g2, p1, p2, t1)) t = t1;
 		else t = t2;
+		aux = intersections(g1, t);
+		curr_inters = aux.first;
+		random_inter = aux.second;
+		//break;
 	}
 	return std::make_pair(t, 0);
 }

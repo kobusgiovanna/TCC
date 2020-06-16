@@ -16,6 +16,8 @@ class trapezoid {
 
 		bool intersects (line l);
 
+		bool above (line l);
+
 
 };
 

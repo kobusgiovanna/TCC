@@ -1,6 +1,10 @@
 
 #include "optimized_naive_dual.hpp"
 
+//fix
+#include <iostream>
+using namespace std;
+
 #define EPS 1e-9
 
 struct optimized_naive_dual::coloured_line {
@@ -34,7 +38,10 @@ bool optimized_naive_dual::x_of_intersection
 }
 
 point optimized_naive_dual::solve (std::vector<line> red,
-		std::vector<line> blue) {
+		std::vector<line> blue, int p1, int p2) {
+
+	//cout<<red.size()<<" "<<blue.size()<<" "<<p1<<" "<<p2<<endl;
+
 	sort(red.begin(), red.end(), at_minus_infinity);
 	sort(blue.begin(), blue.end(), at_minus_infinity);
 
@@ -76,18 +83,24 @@ point optimized_naive_dual::solve (std::vector<line> red,
 				std::swap(p.first_line, p.second_line);
 			}
 			int red_id = red_position[p.first_line.id];
-			if (red_id < ((int)red.size()-1)/2 
-					|| red_id > (int)red.size()/2) {
+			if (red_id != p1) {
 				continue;
 			}
 	 		int blue_id = blue_position[p.second_line.id];
-			if (blue_id < ((int)blue.size()-1)/2 
-					|| blue_id > (int)blue.size()/2) {
+			if (blue_id != p2) {
 				continue;
 			}
 			return point(p.first_line.l, p.second_line.l);
 		}
 	}
-
+	//cout<<"AAA"<<endl;
 	return point(0, 0);	
+
+}
+
+point optimized_naive_dual::solve (std::vector<line> red,
+		std::vector<line> blue) {
+	if (blue.size()%2 == 0) blue.pop_back();
+	if (red.size()%2 == 0) red.pop_back();
+	return solve(red, blue, red.size()/2, blue.size()/2);
 }

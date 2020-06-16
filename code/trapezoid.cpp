@@ -13,3 +13,8 @@ bool trapezoid::intersects (line l) {
 	if (l.is_above(left_up) ^ l.is_above(right_up)) return 1;
 	return 0;
 }
+
+bool trapezoid::above (line l) {
+	if (l.is_below(left_down) ^ l.is_below(right_down)) return 1;
+	return 0;
+}
