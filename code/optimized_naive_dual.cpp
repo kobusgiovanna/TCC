@@ -93,7 +93,6 @@ point optimized_naive_dual::solve (std::vector<line> red,
 			return point(p.first_line.l, p.second_line.l);
 		}
 	}
-	//cout<<"AAA"<<endl;
 	return point(0, 0);	
 
 }

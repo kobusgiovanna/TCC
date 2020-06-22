@@ -1,5 +1,4 @@
 #include <algorithm> 
-#include <ctime>
 #include "phase_2.hpp"
 
 line phase_2::pth_level(std::vector<line> &v, int i, int j, int p, double x) {
@@ -21,7 +20,6 @@ line phase_2::pth_level(std::vector<line> &v, int i, int j, int p, double x) {
 line phase_2::pth_level(std::vector<line> v, int p, double x) {
 	p = std::min(p, (int)v.size() - 1);
 	p = std::max(p, 0);
-	std::random_shuffle(v.begin(), v.end());
 	return pth_level(v, 0, (int)v.size() - 1, p, x);
 }
 
@@ -36,7 +34,8 @@ trapezoid phase_2::new_trapezoid
 		pth_level(g1, p1 + offset, t.left).at(t.left),
 		pth_level(g1, p1 - offset, t.left).at(t.left),
 		pth_level(g1, p1 + offset, t.right).at(t.right),
-		pth_level(g1, p1 - offset, t.right).at(t.right));
+		pth_level(g1, p1 - offset, t.right).at(t.right)
+	);
 	return tau;
 }
 

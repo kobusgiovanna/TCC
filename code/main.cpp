@@ -17,6 +17,7 @@ bool is_solution (line l, std::vector<point> &red,
 int main() {
 
 	srand(time(NULL));
+	//srand(1);
 
 	std::cout << std::setprecision(10) << std::fixed;
 
@@ -24,14 +25,14 @@ int main() {
 
 	//std::cin >> algorithm;
 
-	int red_points = 9;
-	int blue_points = 9;
+	int red_points = 10000;
+	int blue_points = 10000;
 
-	int max_x = 100;
-	int min_x = 100;
+	int max_x = 1000000000;
+	int min_x = 1000000000;
 
-	int max_y = 100;
-	int min_y = 100;	
+	int max_y = 1000000000;
+	int min_y = 1000000000;	
 
 	std::vector<point> red;
 	std::vector<point> blue;
@@ -49,16 +50,16 @@ int main() {
 		blue_dual.push_back(blue[i].dual());
 	}
 
-	
 	std::cout << red.size() << std::endl;
-	for (point p: red) {
-		std::cout << p.x << " " << p.y << std::endl;
+	for (point &p: red) {
+		std::cout << p.dual().m << " " << p.dual().b << std::endl;
 	}
 	std::cout << blue.size() << std::endl;
-	for (point p: blue) {
-		std::cout << p.x << " " << p.y << std::endl;
+	for (point &p: blue) {
+		std::cout << p.dual().m << " " << p.dual().b << std::endl;
 	}
 
+	
 	line solution = line(0, 0);
 
 	if (algorithm == "naive") {

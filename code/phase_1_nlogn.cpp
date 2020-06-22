@@ -2,10 +2,6 @@
 #include <ctime>
 #include "phase_1_nlogn.hpp"
 
-//fix
-#include <iostream>
-using namespace std;
-
 #define EPS 1e-9
 
 std::pair<long long, std::pair<int, int>> phase_1_nlogn::inversions
@@ -37,6 +33,7 @@ std::pair<long long, std::pair<int, int>> phase_1_nlogn::inversions
 	std::pair<long long, std::pair<int, int>> resp;
 	resp.first = resp1.first + resp2.first + resp3.first;
 	if (resp.first == 0) return std::make_pair(0, std::make_pair(0, 0));
+	
 	int r = rand() % resp.first;
 	if (r < resp1.first) resp.second = resp1.second;
 	else if (r < resp1.first + resp2.first) resp.second = resp2.second;
@@ -68,8 +65,8 @@ std::pair<long long, std::pair<line, line>> phase_1_nlogn::intersections
 	std::vector<int> permutation;
 	for (auto x : perm1) permutation.push_back(x.second);
 	auto aux = inversions(permutation);
-	std::pair<line,line> inter =
-		std::make_pair(v[aux.second.first], v[aux.second.second]);
+	auto inver = aux.second;
+	auto inter = std::make_pair(v[inver.first], v[inver.second]);
 	return std::make_pair(aux.first, inter);
 }
 
@@ -86,10 +83,11 @@ bool phase_1_nlogn::odd_level_intersection (std::vector<line> g1,
 	line p2_x1 = pth_level(g2, p2, t.left);
 	line p1_x2 = pth_level(g1, p1, t.right);
 	line p2_x2 = pth_level(g2, p2, t.right);
-	if(p1_x1.smaller_eval(p2_x1, t.left) ^ 
-			p1_x2.smaller_eval(p2_x2, t.right)) {
-		return 1;
-	}
+
+	bool order_left = p1_x1.smaller_eval(p2_x1, t.left);
+	bool order_right = p1_x2.smaller_eval(p2_x2, t.right);
+
+	if (order_left ^ order_right) return 1;
 	return 0;
 }
 
@@ -103,22 +101,23 @@ std::pair<interval, bool> phase_1_nlogn::new_interval
 		std::swap(g1, g2);
 		std::swap(p1, p2);
 	}
-	if (max_intersections(g1) <= 32) return std::make_pair(t, 1);
+	if (max_intersections(g1) <= 32) {
+		return std::make_pair(t, 1);
+	}
 	auto aux = intersections(g1, t);
 	auto curr_inters = aux.first;
 	auto random_inter = aux.second;
 	while (32*curr_inters > max_intersections(g1)) {
-		//cout<<curr_inters<<" "<<t.left<<" "<<t.right<<endl;
 		double pivot = point(random_inter.first, random_inter.second).x;
-		//cout<<pivot<<endl;
 		interval t1 = interval(t.left, pivot);
 		interval t2 = interval(pivot, t.right);
+
 		if(odd_level_intersection(g1, g2, p1, p2, t1)) t = t1;
 		else t = t2;
+
 		aux = intersections(g1, t);
 		curr_inters = aux.first;
 		random_inter = aux.second;
-		//break;
 	}
 	return std::make_pair(t, 0);
 }

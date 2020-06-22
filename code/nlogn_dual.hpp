@@ -8,6 +8,16 @@
 
 namespace nlogn_dual {
 
+	point brute (std::vector<line> g1, std::vector<line> g2, 
+		int p1, int p2, interval t);
+
+	line pth_slope(std::vector<line> &v, int i, int j, int p);
+
+	line pth_slope(std::vector<line> v, int p);
+
+	interval max_interval
+	(std::vector<line> g1, std::vector<line> g2, int p1, int p2);
+
 	point solve (std::vector<line> g1, std::vector<line> g2);
 	
 }

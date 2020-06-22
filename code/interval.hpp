@@ -9,6 +9,8 @@ class interval {
 
 		interval (double left, double right);
 
+		bool contains (double x);
+
 };
 
 #endif

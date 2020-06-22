@@ -27,7 +27,7 @@ class line {
 
 		double eval (double x);
 
-		point at (int x);
+		point at (double x);
 
 		bool smaller_eval (line m, double x);
 

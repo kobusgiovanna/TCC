@@ -33,7 +33,7 @@ double line::eval (double x) {
 	return m*x + b;
 }
 
-point line::at (int x) {
+point line::at (double x) {
 	return point(x, eval(x));
 }
 
