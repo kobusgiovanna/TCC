@@ -1,5 +1,6 @@
 #include "nlogn_dual.hpp"
 #include <cfloat>
+#include <assert.h>
 
 point nlogn_dual::brute (std::vector<line> g1, std::vector<line> g2, 
 		int p1, int p2, interval t){
@@ -71,5 +72,6 @@ point nlogn_dual::solve (std::vector<line> g1, std::vector<line> g2) {
 		phase_3::discard_lines(g1, g2, p1, p2, tau);
 		next_interval = phase_1_nlogn::new_interval(g1, g2, p1, p2, t);
 	}
+	assert(p1 < g1.size() && p2 < g2.size());
 	return brute(g1, g2, p1, p2, t);
 }
