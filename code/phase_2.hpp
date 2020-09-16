@@ -13,7 +13,6 @@ namespace phase_2 {
 	*/
 	line pth_level(std::vector<line> v, int p, double x);
 
-	trapezoid new_trapezoid (std::vector<line> g1,
-	std::vector<line> g2, int p1, int p2, interval t);
+	trapezoid new_trapezoid (std::vector<line> g1, int p1, interval t);
 
 }

@@ -1,21 +1,27 @@
 #include "nlogn_dual.hpp"
 #include <cfloat>
 #include <assert.h>
+#include <iostream>
+
+bool nlogn_dual::is_pth_level (std::vector<line> g, int p, point i) {
+	int below = 0;
+	for (line gg : g) {
+		if (gg.is_below(i)) below++;
+	}
+	return below == p;
+
+}
 
 point nlogn_dual::brute (std::vector<line> g1, std::vector<line> g2, 
 		int p1, int p2, interval t){
+	std::cout<<g1.size()<<" "<<g2.size()<<" "<<p1<<" "<<p2<<std::endl;
 	for (auto l1 : g1) {
 		for (auto l2 : g2) {
 			point pre = point(l1, l2);
 			if (!t.contains(pre.x)) continue;
-			int below1 = 0, below2 = 0;
-			for (auto ll1 : g1) {
-				if (ll1.is_below(pre)) below1++;
+			if (is_pth_level(g1, p1, pre) && is_pth_level(g2, p2, pre)) {
+				return pre;
 			}
-			for (auto ll2 : g2) {
-				if (ll2.is_below(pre)) below2++;
-			}
-			if (below1 == p1 && below2 == p2) return pre;
 		}
 	}
 	return point(0, 0);
@@ -60,18 +66,23 @@ interval nlogn_dual::max_interval
 }
 
 point nlogn_dual::solve (std::vector<line> g1, std::vector<line> g2) {
+	//std:cout<<"banana"<<std::endl;
 	if (g1.size()%2 == 0) g1.pop_back(); 	
 	if (g2.size()%2 == 0) g2.pop_back(); 
 	int p1 = g1.size()/2;
 	int p2 = g2.size()/2;
 	interval t = max_interval(g1, g2, p1, p2);
-	auto next_interval = phase_1_nlogn::new_interval(g1, g2, p1, p2, t);
-	while (next_interval.second == 0){
-		t = next_interval.first;
-		trapezoid tau = phase_2::new_trapezoid(g1, g2, p1, p2, t);
-		phase_3::discard_lines(g1, g2, p1, p2, tau);
-		next_interval = phase_1_nlogn::new_interval(g1, g2, p1, p2, t);
+	interval t2 = phase_1_nlogn::new_interval(g1, g2, p1, p2, t);
+	while (g1.size() > 32 && g2.size() > 32){
+		std::cout<<g1.size()<<" "<<g2.size()<<std::endl;
+		if (g1.size() > g2.size()) {
+			std::swap(g1, g2);
+			std::swap(p1, p2);
+		}
+		t = t2;
+		trapezoid tau = phase_2::new_trapezoid(g1, p1, t);
+		phase_3::discard_lines(g1, p1, tau);
+		t2 = phase_1_nlogn::new_interval(g1, g2, p1, p2, t);
 	}
-	assert(p1 < g1.size() && p2 < g2.size());
 	return brute(g1, g2, p1, p2, t);
 }

@@ -1,6 +1,6 @@
-#include "phase_3.hpp"
+#include "discard_lines.hpp"
 
-void phase_3::discard_lines
+void discard_lines::discard_lines
 (std::vector<line> &g1, int &p1, trapezoid tau) {
 	std::vector<line> new_g1;
 	for (auto l : g1) {
